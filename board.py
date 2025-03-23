@@ -12,8 +12,11 @@ class Board:
             self.color = pygame.Color("yellow")
             self.padding = 5
 
-        def draw(self, screen: pygame.Surface):
+        def draw(self, screen: pygame.Surface) -> None:
             pygame.draw.rect(screen, self.color, self.rect.inflate(-self.padding, -self.padding))
+
+        def drawFighter(self, screen: pygame.Surface) -> None:
+            pygame.draw.circle(screen, "red", self.rect.center, TILE_SIZE // 2)
 
     def __init__(self, screen_rect: pygame.Rect) -> None:
         self.rows = 20
@@ -31,3 +34,6 @@ class Board:
     def draw(self, screen: pygame.Surface) -> None:
         for tile in self.tiles:
             tile.draw(screen)
+
+    def getTileAt(self, grid_pos: pygame.Vector2) -> Tile:
+        return self.tiles[int(grid_pos.y * self.columns + grid_pos.x)]

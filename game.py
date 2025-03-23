@@ -1,6 +1,7 @@
 from enum import Enum
 from animation import *
-from board import *
+from fighter import *
+import random
 
 FPS = 60
 
@@ -17,6 +18,11 @@ class Game:
         self.state = States.Playing
         self.board = Board(self.screen_rect)
 
+        # Generate fighter position.
+        rand_x = random.randint(0, self.board.columns - 1)
+        rand_y = random.randint(0, self.board.rows - 1)
+        self.fighter = Fighter(self.board, pygame.Vector2(rand_x, rand_y))
+
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
         self.screen.fill("black")
@@ -31,6 +37,7 @@ class Game:
 
     def render_frame(self) -> None:
         self.board.draw(self.screen)
+        self.fighter.draw(self.screen)
 
     def resetGame(self) -> None:
         self.state = States.Playing
