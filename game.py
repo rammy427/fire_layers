@@ -17,22 +17,30 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = States.Playing
         self.board = Board(self.screen_rect)
-
-        # Generate fighter position.
-        rand_x = random.randint(0, self.board.height - 1)
-        rand_y = random.randint(0, self.board.width - 1)
-        self.fighter = Fighter(self.board, pygame.Vector2(rand_x, rand_y))
+        
+        self.fighters: list[Fighter] = []
+        fighters_per_team = 2
+        # Generate fighters.
+        for n in range(fighters_per_team):
+            rand_x = random.randint(0, self.board.height - 1)
+            rand_y = random.randint(0, self.board.width - 1)
+            self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
+        
+        for n in range(fighters_per_team):
+            rand_x = random.randint(0, self.board.height - 1)
+            rand_y = random.randint(0, self.board.width - 1)
+            self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
 
     def processEvent(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                self.fighter.move((-1, 0))
+                self.fighters[0].move((-1, 0))
             elif event.key == pygame.K_d:
-                self.fighter.move((1, 0))
+                self.fighters[0].move((1, 0))
             elif event.key == pygame.K_w:
-                self.fighter.move((0, -1))
+                self.fighters[0].move((0, -1))
             elif event.key == pygame.K_s:
-                self.fighter.move((0, 1))
+                self.fighters[0].move((0, 1))
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
@@ -48,7 +56,8 @@ class Game:
 
     def render_frame(self) -> None:
         self.board.draw(self.screen)
-        self.fighter.draw(self.screen)
+        for fighter in self.fighters:
+            fighter.draw(self.screen)
 
     def resetGame(self) -> None:
         self.state = States.Playing

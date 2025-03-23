@@ -15,8 +15,8 @@ class Board:
         def draw(self, screen: pygame.Surface) -> None:
             pygame.draw.rect(screen, self.color, self.rect.inflate(-self.padding, -self.padding))
 
-        def drawFighter(self, screen: pygame.Surface) -> None:
-            pygame.draw.circle(screen, "red", self.rect.center, TILE_SIZE // 2)
+        def drawFighter(self, screen: pygame.Surface, color: pygame.Color) -> None:
+            pygame.draw.circle(screen, color, self.rect.center, TILE_SIZE // 2)
 
     def __init__(self, screen_rect: pygame.Rect) -> None:
         self.width = 20
