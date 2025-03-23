@@ -35,13 +35,13 @@ class Game:
 
     def processEvent(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
+            if event.key in (pygame.K_a, pygame.K_LEFT):
                 self.fighters[self.moving_index].move((-1, 0))
-            elif event.key == pygame.K_d:
+            elif event.key in (pygame.K_d, pygame.K_RIGHT):
                 self.fighters[self.moving_index].move((1, 0))
-            elif event.key == pygame.K_w:
+            elif event.key in (pygame.K_w, pygame.K_UP):
                 self.fighters[self.moving_index].move((0, -1))
-            elif event.key == pygame.K_s:
+            elif event.key in (pygame.K_s, pygame.K_DOWN):
                 self.fighters[self.moving_index].move((0, 1))
             elif event.key == pygame.K_RETURN:
                 self.moving_index = (self.moving_index + 1) % len(self.fighters)
