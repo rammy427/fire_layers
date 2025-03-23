@@ -17,10 +17,12 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = States.Playing
         self.board = Board(self.screen_rect)
+        # Índice del personaje que se está moviendo.
+        self.moving_index = 0
         
         self.fighters: list[Fighter] = []
         fighters_per_team = 2
-        # Generate fighters.
+        # Generar personajes.
         for n in range(fighters_per_team):
             rand_x = random.randint(0, self.board.height - 1)
             rand_y = random.randint(0, self.board.width - 1)
@@ -34,13 +36,15 @@ class Game:
     def processEvent(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                self.fighters[0].move((-1, 0))
+                self.fighters[self.moving_index].move((-1, 0))
             elif event.key == pygame.K_d:
-                self.fighters[0].move((1, 0))
+                self.fighters[self.moving_index].move((1, 0))
             elif event.key == pygame.K_w:
-                self.fighters[0].move((0, -1))
+                self.fighters[self.moving_index].move((0, -1))
             elif event.key == pygame.K_s:
-                self.fighters[0].move((0, 1))
+                self.fighters[self.moving_index].move((0, 1))
+            elif event.key == pygame.K_RETURN:
+                self.moving_index = (self.moving_index + 1) % len(self.fighters)
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
