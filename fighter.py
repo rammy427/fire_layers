@@ -8,5 +8,8 @@ class Fighter:
         self.grid_pos = grid_pos
         self.hp = 100
 
+    def move(self, delta: pygame.Vector2):
+        self.grid_pos += delta
+
     def draw(self, screen: pygame.Surface) -> None:
         self.brd.getTileAt(self.grid_pos).drawFighter(screen)

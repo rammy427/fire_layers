@@ -25,6 +25,8 @@ async def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT or game.hasQuit():
                 running = False
+            else:
+                game.processEvent(event)
 
         game.run()
         await asyncio.sleep(0)
