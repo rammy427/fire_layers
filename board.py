@@ -19,21 +19,21 @@ class Board:
             pygame.draw.circle(screen, "red", self.rect.center, TILE_SIZE // 2)
 
     def __init__(self, screen_rect: pygame.Rect) -> None:
-        self.rows = 20
-        self.columns = 20
+        self.width = 20
+        self.height = 20
 
         # Calcular posición para centralizar el tablero.
-        top_left = screen_rect.center - TILE_SIZE / 2 * pygame.Vector2(self.rows, self.columns)
+        top_left = screen_rect.center - TILE_SIZE / 2 * pygame.Vector2(self.width, self.height)
         
         self.tiles = []
         # Generar fichas del tablero.
-        for row in range(self.rows):
-            for col in range(self.columns):
-                self.tiles.append(self.Tile(top_left + TILE_SIZE * pygame.Vector2(row, col)))
+        for y in range(self.width):
+            for x in range(self.height):
+                self.tiles.append(self.Tile(top_left + TILE_SIZE * pygame.Vector2(x, y)))
     
     def draw(self, screen: pygame.Surface) -> None:
         for tile in self.tiles:
             tile.draw(screen)
 
     def getTileAt(self, grid_pos: pygame.Vector2) -> Tile:
-        return self.tiles[int(grid_pos.y * self.columns + grid_pos.x)]
+        return self.tiles[int(grid_pos.y * self.height + grid_pos.x)]
