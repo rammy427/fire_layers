@@ -21,32 +21,40 @@ class Game:
         self.moving_index = 0
         
         self.fighters: list[Fighter] = []
-        fighters_per_team = 2
+        fighters_per_team = 1
         # Generar personajes.
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
         for n in range(fighters_per_team):
-            rand_x = random.randint(0, self.board.height - 1)
-            rand_y = random.randint(0, self.board.width - 1)
+            rand_x = random.randint(0, self.board.width - 1)
+            rand_y = random.randint(0, self.board.height - 1)
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
         
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 2.
         for n in range(fighters_per_team):
-            rand_x = random.randint(0, self.board.height - 1)
-            rand_y = random.randint(0, self.board.width - 1)
+            rand_x = random.randint(0, self.board.width - 1)
+            rand_y = random.randint(0, self.board.height - 1)
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
 
-    def processEvent(self, event: pygame.event.Event) -> None:
-        if event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_a, pygame.K_LEFT):
-                self.fighters[self.moving_index].move((-1, 0))
-            elif event.key in (pygame.K_d, pygame.K_RIGHT):
-                self.fighters[self.moving_index].move((1, 0))
-            elif event.key in (pygame.K_w, pygame.K_UP):
-                self.fighters[self.moving_index].move((0, -1))
-            elif event.key in (pygame.K_s, pygame.K_DOWN):
-                self.fighters[self.moving_index].move((0, 1))
-            elif event.key == pygame.K_RETURN:
-                self.moving_index = (self.moving_index + 1) % len(self.fighters)
+    def executeAction(self, instruction: str) -> None:
+        # Movida a la izquierda.
+        if instruction == "LEFT":
+            self.fighters[self.moving_index].move((-1, 0))
+            
+        # Movida a la derecha.
+        elif instruction == "RIGHT":
+            self.fighters[self.moving_index].move((1, 0))
+
+        # Movida hacia arriba.
+        elif instruction == "UP":
+            self.fighters[self.moving_index].move((0, -1))
+
+        # Movida hacia abajo.
+        elif instruction == "DOWN":
+            self.fighters[self.moving_index].move((0, 1))
+
+        # Cambio de personaje.
+        elif instruction == "PASO":
+            self.moving_index = (self.moving_index + 1) % len(self.fighters)
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
