@@ -23,11 +23,13 @@ class Game:
         self.fighters: list[Fighter] = []
         fighters_per_team = 2
         # Generar personajes.
+        # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
         for n in range(fighters_per_team):
             rand_x = random.randint(0, self.board.height - 1)
             rand_y = random.randint(0, self.board.width - 1)
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
         
+        # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 2.
         for n in range(fighters_per_team):
             rand_x = random.randint(0, self.board.height - 1)
             rand_y = random.randint(0, self.board.width - 1)

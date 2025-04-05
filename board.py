@@ -20,15 +20,15 @@ class Board:
 
     def __init__(self, screen_rect: pygame.Rect) -> None:
         self.width = 20
-        self.height = 20
+        self.height = 16
 
         # Calcular posición para centralizar el tablero.
         top_left = screen_rect.center - TILE_SIZE / 2 * pygame.Vector2(self.width, self.height)
         
         self.tiles = []
         # Generar fichas del tablero.
-        for y in range(self.width):
-            for x in range(self.height):
+        for y in range(self.height):
+            for x in range(self.width):
                 self.tiles.append(self.Tile(top_left + TILE_SIZE * pygame.Vector2(x, y)))
     
     def draw(self, screen: pygame.Surface) -> None:
