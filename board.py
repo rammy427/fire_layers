@@ -36,4 +36,4 @@ class Board:
             tile.draw(screen)
 
     def getTileAt(self, grid_pos: pygame.Vector2) -> Tile:
-        return self.tiles[int(grid_pos.y * self.height + grid_pos.x)]
+        return self.tiles[int(grid_pos.y * self.width + grid_pos.x)]
