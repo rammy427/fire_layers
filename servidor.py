@@ -43,7 +43,7 @@ def handle_client(client_socket, client_address):
                 sessions[session_id][0].send(message.encode())
 
             # Si el mensaje es "PASO", indicar que el turno ha terminado
-            if message == "PASO":
+            if message == "P":
                 if client_socket == sessions[session_id][0]:
                     sessions[session_id][1].send("Es tu turno.".encode())
                 else:

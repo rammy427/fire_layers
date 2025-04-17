@@ -29,13 +29,13 @@ def processEvent(event: pygame.event.Event):
 
     if event.type == pygame.KEYDOWN:
         match event.key:
-            case pygame.K_a: instruction = "LEFT"
-            case pygame.K_d: instruction = "RIGHT"
-            case pygame.K_w: instruction = "UP"
-            case pygame.K_s: instruction = "DOWN"
+            case pygame.K_a: instruction = "L"
+            case pygame.K_d: instruction = "R"
+            case pygame.K_w: instruction = "U"
+            case pygame.K_s: instruction = "D"
             case pygame.K_RETURN:
                 has_current_turn = False
-                instruction = "PASO"
+                instruction = "P"
     
     client_socket.send(instruction.encode())
     game.executeAction(instruction)

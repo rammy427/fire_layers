@@ -11,7 +11,7 @@ class States(Enum):
     Quit = 2
 
 class Game:
-    def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect) -> None:
+    def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect, seed: int) -> None:
         self.screen = screen
         self.screen_rect = screen_rect
         self.clock = pygame.time.Clock()
@@ -20,32 +20,33 @@ class Game:
         # Índice del personaje que se está moviendo.
         self.moving_index = 0
         
+        random.seed(seed)
         self.fighters: list[Fighter] = []
         fighters_per_team = 1
         # Generar personajes.
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
         for n in range(fighters_per_team):
-            rand_x = random.randint(0, self.board.width - 1)
+            rand_x = random.randint(0, self.board.width // 2 - 2)
             rand_y = random.randint(0, self.board.height - 1)
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
         
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 2.
         for n in range(fighters_per_team):
-            rand_x = random.randint(0, self.board.width - 1)
+            rand_x = random.randint(self.board.width // 2 + 1, self.board.width - 1)
             rand_y = random.randint(0, self.board.height - 1)
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
 
     def executeAction(self, instruction: str) -> None:
         match instruction:
-            case "LEFT":
+            case "L":
                 self.fighters[self.moving_index].move((-1, 0))
-            case "RIGHT":
+            case "R":
                 self.fighters[self.moving_index].move((1, 0))
-            case "UP":
+            case "U":
                 self.fighters[self.moving_index].move((0, -1))
-            case "DOWN":
+            case "D":
                 self.fighters[self.moving_index].move((0, 1))
-            case "PASO":
+            case "P":
                 self.moving_index = (self.moving_index + 1) % len(self.fighters)
 
     def run(self) -> None:
