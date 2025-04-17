@@ -1,5 +1,4 @@
 from game import *
-import asyncio
 import socket
 
 # Inicializar ventana.
@@ -53,7 +52,7 @@ def processEvent(event: pygame.event.Event):
             client_socket.send("PASO".encode())
             game.executeAction("PASO")
 
-async def main():
+def main():
     # Ciclo principal del juego.
     global running, has_current_turn
     while running:
@@ -72,8 +71,7 @@ async def main():
                     print("Me cedieron el turno!")
 
         game.run()
-        await asyncio.sleep(0)
 
     pygame.quit()
 
-asyncio.run(main())
+main()
