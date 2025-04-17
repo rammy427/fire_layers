@@ -15,7 +15,9 @@ pygame.display.set_caption("Fire Layers")
 
 # Inicializar conexión.
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(("127.0.0.1", 12345))
+DEBUG = False
+IP = "127.0.0.1" if DEBUG else "100.89.70.82"
+client_socket.connect((IP, 12345))
 
 running = True
 # Booleano para saber si es el turno de ESTE cliente.
