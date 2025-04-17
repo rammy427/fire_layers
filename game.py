@@ -26,28 +26,42 @@ class Game:
         # Generar personajes.
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
         for n in range(fighters_per_team):
-            rand_x = random.randint(0, self.board.width // 2 - 2)
-            rand_y = random.randint(0, self.board.height - 1)
+            while True:
+                rand_x = random.randint(0, self.board.width // 2 - 2)
+                rand_y = random.randint(0, self.board.height - 1)
+                if (self.canMove(pygame.Vector2(rand_x, rand_y))):
+                    break
+
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
         
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 2.
         for n in range(fighters_per_team):
-            rand_x = random.randint(self.board.width // 2 + 1, self.board.width - 1)
-            rand_y = random.randint(0, self.board.height - 1)
+            while True:
+                rand_x = random.randint(self.board.width // 2 + 1, self.board.width - 1)
+                rand_y = random.randint(0, self.board.height - 1)
+                if (self.canMove(pygame.Vector2(rand_x, rand_y))):
+                    break
+
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
 
     def executeAction(self, instruction: str) -> None:
+        delta_pos = pygame.Vector2(0, 0)
         match instruction:
             case "L":
-                self.fighters[self.moving_index].move((-1, 0))
+                delta_pos = pygame.Vector2(-1, 0)
             case "R":
-                self.fighters[self.moving_index].move((1, 0))
+                delta_pos = pygame.Vector2(1, 0)
             case "U":
-                self.fighters[self.moving_index].move((0, -1))
+                delta_pos = pygame.Vector2(0, -1)
             case "D":
-                self.fighters[self.moving_index].move((0, 1))
+                delta_pos = pygame.Vector2(0, 1)
             case "P":
                 self.moving_index = (self.moving_index + 1) % len(self.fighters)
+        
+        if delta_pos != pygame.Vector2(0, 0):
+            target_pos = self.fighters[self.moving_index].grid_pos + delta_pos
+            if (self.canMove(target_pos)):
+                self.fighters[self.moving_index].move(delta_pos)
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
@@ -74,3 +88,10 @@ class Game:
 
     def hasQuit(self) -> bool:
         return self.state == States.Quit
+    
+    def canMove(self, target_pos: pygame.Vector2) -> bool:
+        for fighter in self.fighters:
+            if fighter.grid_pos == target_pos:
+                print("¡Está ocupado! :(")
+                return False
+        return True
