@@ -25,32 +25,20 @@ game = Game(screen, screen_rect)
 
 def processEvent(event: pygame.event.Event):
     global has_current_turn
+    instruction = ""
+
     if event.type == pygame.KEYDOWN:
-        # Movida a la izquierda.
-        if event.key in (pygame.K_a, pygame.K_LEFT):
-            client_socket.send("LEFT".encode())
-            game.executeAction("LEFT")
-
-        # Movida a la derecha.
-        elif event.key in (pygame.K_d, pygame.K_RIGHT):
-            client_socket.send("RIGHT".encode())
-            game.executeAction("RIGHT")
-
-        # Movida hacia arriba.
-        elif event.key in (pygame.K_w, pygame.K_UP):
-            client_socket.send("UP".encode())
-            game.executeAction("UP")
-
-        # Movida hacia abajo.
-        elif event.key in (pygame.K_s, pygame.K_DOWN):
-            client_socket.send("DOWN".encode())
-            game.executeAction("DOWN")
-
-        # Cambio de turno.
-        elif event.key == pygame.K_RETURN:
-            has_current_turn = False
-            client_socket.send("PASO".encode())
-            game.executeAction("PASO")
+        match event.key:
+            case pygame.K_a: instruction = "LEFT"
+            case pygame.K_d: instruction = "RIGHT"
+            case pygame.K_w: instruction = "UP"
+            case pygame.K_s: instruction = "DOWN"
+            case pygame.K_RETURN:
+                has_current_turn = False
+                instruction = "PASO"
+    
+    client_socket.send(instruction.encode())
+    game.executeAction(instruction)
 
 def main():
     # Ciclo principal del juego.
