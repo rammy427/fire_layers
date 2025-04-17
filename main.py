@@ -21,7 +21,7 @@ running = True
 # Booleano para saber si es el turno de ESTE cliente.
 has_current_turn = False
 
-game = Game(screen, screen_rect)
+game = Game(screen, screen_rect, 0)
 
 def processEvent(event: pygame.event.Event):
     global has_current_turn
