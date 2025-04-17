@@ -56,6 +56,12 @@ def main():
                 # Recibir mensajes del servidor.
                 response = client_socket.recv(1024).decode()
                 print(f"Servidor: {response}")
+
+                if "SEMILLA" in response:
+                    seed = int(response.split(':')[1][:2])
+                    print(seed)
+                    game.spawnFighters(seed)
+
                 if "Es tu turno" in response:
                     has_current_turn = True
                     print("Me cedieron el turno!")

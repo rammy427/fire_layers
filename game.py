@@ -17,11 +17,14 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = States.Playing
         self.board = Board(self.screen_rect)
+        # Inicializar lista vacía de personajes.
+        self.fighters: list[Fighter] = []
         # Índice del personaje que se está moviendo.
         self.moving_index = 0
-        
+
+    # Función para generar los personajes fuera del constructor.
+    def spawnFighters(self, seed: int) -> None:
         random.seed(seed)
-        self.fighters: list[Fighter] = []
         fighters_per_team = 1
         # Generar personajes.
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
