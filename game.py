@@ -11,7 +11,7 @@ class States(Enum):
     Quit = 2
 
 class Game:
-    def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect, seed: int) -> None:
+    def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect) -> None:
         self.screen = screen
         self.screen_rect = screen_rect
         self.clock = pygame.time.Clock()
