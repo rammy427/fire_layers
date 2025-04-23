@@ -40,7 +40,7 @@ def processEvent(event: pygame.event.Event):
                 instruction = "P"
     
     client_socket.send(instruction.encode())
-    game.executeAction(instruction)
+    game.executeAction(instruction, False)
 
 def main():
     # Ciclo principal del juego.
@@ -52,27 +52,30 @@ def main():
                 running = False
             elif has_current_turn:
                 processEvent(event)
-            else:
-                # Recibir mensajes del servidor.
-                response = client_socket.recv(1024).decode()
-                print(f"Servidor: {response}")
 
-                client_id = 0
-                # Calcular ID del cliente la primera vez que se recibe el mensaje.
-                if "Sesión iniciada" in response:
-                    client_id = int("Es tu turno" in response)
-                    game.setIds(client_id)
+        if not has_current_turn:
+            # Recibir mensajes del servidor.
+            response = client_socket.recv(1024).decode()
+            print(f"Servidor: {response}")
 
-                if "SEMILLA" in response:
-                    # Analizando string con la semilla.
-                    seed = int(response.split(':')[1][:2])
-                    print(seed)
-                    # Generando posiciones de los soldados con la semilla.
-                    game.spawnFighters(seed)
+            client_id = 0
+            # Calcular ID del cliente la primera vez que se recibe el mensaje.
+            if "Sesión iniciada" in response:
+                client_id = int("Es tu turno" in response)
+                game.setIds(client_id)
 
-                if "Es tu turno" in response:
-                    has_current_turn = True
-                    print("Me cedieron el turno!")
+            if "SEMILLA" in response:
+                # Analizando string con la semilla.
+                seed = int(response.split(':')[1][:2])
+                print(seed)
+                # Generando posiciones de los soldados con la semilla.
+                game.spawnFighters(seed)
+
+            if "Es tu turno" in response:
+                has_current_turn = True
+                print("Me cedieron el turno!")
+
+            game.executeAction(response, True)
 
         game.run()
 

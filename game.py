@@ -22,8 +22,6 @@ class Game:
         self.board = Board(self.screen_rect)
         # Inicializar lista vacía de personajes.
         self.fighters: list[Fighter] = []
-        # Índice del personaje que se está moviendo.
-        self.moving_index = 0
 
     # Función para asignar IDs permanentes de los clientes.
     # Solamente se llama al inicio de la sesión.
@@ -57,7 +55,8 @@ class Game:
 
             self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
 
-    def executeAction(self, instruction: str) -> None:
+    def executeAction(self, instruction: str, other: bool) -> None:
+        id = self.other_id if other else self.this_id
         delta_pos = pygame.Vector2(0, 0)
         match instruction:
             case "L":
@@ -68,13 +67,11 @@ class Game:
                 delta_pos = pygame.Vector2(0, -1)
             case "D":
                 delta_pos = pygame.Vector2(0, 1)
-            case "P":
-                self.moving_index = (self.moving_index + 1) % len(self.fighters)
         
         if delta_pos != pygame.Vector2(0, 0):
-            target_pos = self.fighters[self.moving_index].grid_pos + delta_pos
+            target_pos = self.fighters[id].grid_pos + delta_pos
             if (self.canMove(target_pos)):
-                self.fighters[self.moving_index].move(delta_pos)
+                self.fighters[id].move(delta_pos)
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
