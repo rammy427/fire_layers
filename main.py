@@ -4,8 +4,10 @@ import socket
 # Inicializar ventana.
 pygame.init()
 
+DEBUG = True
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+FIGHTERS_PER_TEAM = 3
 
 # screen es una superficie (Surface) para renderizar el juego.
 # set_mode devuelve un Surface.
@@ -15,7 +17,6 @@ pygame.display.set_caption("Fire Layers")
 
 # Inicializar conexión.
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-DEBUG = True
 IP = "127.0.0.1" if DEBUG else "100.89.70.82"
 client_socket.connect((IP, 12345))
 
@@ -69,7 +70,7 @@ def main():
                 seed = int(response.split(':')[1][:2])
                 print(seed)
                 # Generando posiciones de los soldados con la semilla.
-                game.spawnFighters(seed)
+                game.spawnFighters(seed, FIGHTERS_PER_TEAM)
 
             if "Es tu turno" in response:
                 has_current_turn = True

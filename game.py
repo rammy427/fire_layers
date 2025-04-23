@@ -20,7 +20,7 @@ class Game:
         self.this_id = 0
         self.other_id = 1
         self.board = Board(self.screen_rect)
-        # Inicializar lista vacía de personajes.
+        # Manejar personajes de los jugadores.
         self.fighters: list[Fighter] = []
 
     # Función para asignar IDs permanentes de los clientes.
@@ -31,9 +31,8 @@ class Game:
         print("This ID: %d\nOther ID: %d" % (self.this_id, self.other_id))
 
     # Función para generar los personajes fuera del constructor.
-    def spawnFighters(self, seed: int) -> None:
+    def spawnFighters(self, seed: int, fighters_per_team: int) -> None:
         random.seed(seed)
-        fighters_per_team = 1
         # Generar personajes.
         # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
         for n in range(fighters_per_team):
