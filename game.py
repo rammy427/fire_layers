@@ -16,11 +16,21 @@ class Game:
         self.screen_rect = screen_rect
         self.clock = pygame.time.Clock()
         self.state = States.Playing
+        # ID de este cliente y el "otro".
+        self.this_id = 0
+        self.other_id = 1
         self.board = Board(self.screen_rect)
         # Inicializar lista vacía de personajes.
         self.fighters: list[Fighter] = []
         # Índice del personaje que se está moviendo.
         self.moving_index = 0
+
+    # Función para asignar IDs permanentes de los clientes.
+    # Solamente se llama al inicio de la sesión.
+    def setIds(self, id: int) -> None:
+        self.this_id = id
+        self.other_id = 1 - id
+        print("This ID: %d\nOther ID: %d" % (self.this_id, self.other_id))
 
     # Función para generar los personajes fuera del constructor.
     def spawnFighters(self, seed: int) -> None:
