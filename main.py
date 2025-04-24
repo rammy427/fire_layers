@@ -23,11 +23,13 @@ client_socket.connect((IP, 12345))
 running = True
 # Booleano para saber si es el turno de ESTE cliente.
 has_current_turn = False
+# Índice del personaje que se está moviendo.
+team_chars = 0
 
-game = Game(screen, screen_rect)
+game = Game(screen, screen_rect, FIGHTERS_PER_TEAM)
 
 def processEvent(event: pygame.event.Event):
-    global has_current_turn
+    global has_current_turn, team_chars
     instruction = ""
 
     if event.type == pygame.KEYDOWN:
@@ -37,10 +39,16 @@ def processEvent(event: pygame.event.Event):
             case pygame.K_w: instruction = "U"
             case pygame.K_s: instruction = "D"
             case pygame.K_RETURN:
-                has_current_turn = False
-                instruction = "P"
+                team_chars = (team_chars + 1) % FIGHTERS_PER_TEAM
+                print(team_chars)
+                if (team_chars == 0):
+                    has_current_turn = False
+                    instruction = "P"
+                else:
+                    instruction = "N"
     
     client_socket.send(instruction.encode())
+    # Ejecutar la instrucción para ESTE equipo.
     game.executeAction(instruction, False)
 
 def main():
@@ -70,12 +78,13 @@ def main():
                 seed = int(response.split(':')[1][:2])
                 print(seed)
                 # Generando posiciones de los soldados con la semilla.
-                game.spawnFighters(seed, FIGHTERS_PER_TEAM)
+                game.spawnFighters(seed)
 
             if "Es tu turno" in response:
                 has_current_turn = True
                 print("Me cedieron el turno!")
 
+            # Ejecutar la instrucción para el OTRO equipo.
             game.executeAction(response, True)
 
         game.run()

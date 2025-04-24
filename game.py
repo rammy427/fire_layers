@@ -11,7 +11,7 @@ class States(Enum):
     Quit = 2
 
 class Game:
-    def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect) -> None:
+    def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect, fighters_per_team: int) -> None:
         self.screen = screen
         self.screen_rect = screen_rect
         self.clock = pygame.time.Clock()
@@ -21,7 +21,10 @@ class Game:
         self.other_id = 1
         self.board = Board(self.screen_rect)
         # Manejar personajes de los jugadores.
-        self.fighters: list[Fighter] = []
+        self.fighters: list[list[Fighter]] = []
+        self.fighters_per_team = fighters_per_team
+        # Índice del personaje que se está moviendo.
+        self.cur_char = 0
 
     # Función para asignar IDs permanentes de los clientes.
     # Solamente se llama al inicio de la sesión.
@@ -31,31 +34,36 @@ class Game:
         print("This ID: %d\nOther ID: %d" % (self.this_id, self.other_id))
 
     # Función para generar los personajes fuera del constructor.
-    def spawnFighters(self, seed: int, fighters_per_team: int) -> None:
+    def spawnFighters(self, seed: int) -> None:
         random.seed(seed)
-        # Generar personajes.
-        # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 1.
-        for n in range(fighters_per_team):
+        # Generar personajes del primer equipo.
+        first_team: list[Fighter] = []
+        for n in range(self.fighters_per_team):
             while True:
                 rand_x = random.randint(0, self.board.width // 2 - 2)
                 rand_y = random.randint(0, self.board.height - 1)
                 if (self.canMove(pygame.Vector2(rand_x, rand_y))):
                     break
 
-            self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
+            first_team.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
         
-        # ESTE LO DEBE HACER EL SERVIDOR AL UNIRSE EL CLIENTE 2.
-        for n in range(fighters_per_team):
+        # Generar personajes del segundo equipo.
+        second_team: list[Fighter] = []
+        for n in range(self.fighters_per_team):
             while True:
                 rand_x = random.randint(self.board.width // 2 + 1, self.board.width - 1)
                 rand_y = random.randint(0, self.board.height - 1)
                 if (self.canMove(pygame.Vector2(rand_x, rand_y))):
                     break
 
-            self.fighters.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
+            second_team.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
+        
+        # "Concatenar" ambos equipos.
+        self.fighters.append(first_team)
+        self.fighters.append(second_team)
 
     def executeAction(self, instruction: str, other: bool) -> None:
-        id = self.other_id if other else self.this_id
+        team_index = self.other_id if other else self.this_id
         delta_pos = pygame.Vector2(0, 0)
         match instruction:
             case "L":
@@ -66,11 +74,13 @@ class Game:
                 delta_pos = pygame.Vector2(0, -1)
             case "D":
                 delta_pos = pygame.Vector2(0, 1)
+            case "N":
+                self.cur_char = (self.cur_char + 1) % self.fighters_per_team
         
         if delta_pos != pygame.Vector2(0, 0):
-            target_pos = self.fighters[id].grid_pos + delta_pos
+            target_pos = self.fighters[team_index][self.cur_char].grid_pos + delta_pos
             if (self.canMove(target_pos)):
-                self.fighters[id].move(delta_pos)
+                self.fighters[team_index][self.cur_char].move(delta_pos)
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
@@ -86,8 +96,9 @@ class Game:
 
     def render_frame(self) -> None:
         self.board.draw(self.screen)
-        for fighter in self.fighters:
-            fighter.draw(self.screen)
+        for team in self.fighters:
+            for fighter in team:
+                fighter.draw(self.screen)
 
     def resetGame(self) -> None:
         self.state = States.Playing
@@ -99,8 +110,9 @@ class Game:
         return self.state == States.Quit
     
     def canMove(self, target_pos: pygame.Vector2) -> bool:
-        for fighter in self.fighters:
-            if fighter.grid_pos == target_pos:
-                print("¡Está ocupado! :(")
-                return False
+        for team in self.fighters:
+            for fighter in team:
+                if fighter.grid_pos == target_pos:
+                    print("¡Está ocupado! :(")
+                    return False
         return True
