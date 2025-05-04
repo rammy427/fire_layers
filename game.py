@@ -76,6 +76,9 @@ class Game:
                 delta_pos = pygame.Vector2(0, 1)
             case "N":
                 self.cur_char = (self.cur_char + 1) % self.fighters_per_team
+            case "A":
+                str = "¡Me están atacando :'(!" if other else "¡Estoy atacando >:)!"
+                print(str)
         
         if delta_pos != pygame.Vector2(0, 0):
             target_pos = self.fighters[team_index][self.cur_char].grid_pos + delta_pos

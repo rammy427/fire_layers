@@ -38,6 +38,7 @@ def processEvent(event: pygame.event.Event):
             case pygame.K_d: instruction = "R"
             case pygame.K_w: instruction = "U"
             case pygame.K_s: instruction = "D"
+            case pygame.K_z: instruction = "A"
             case pygame.K_RETURN:
                 team_chars = (team_chars + 1) % FIGHTERS_PER_TEAM
                 print(team_chars)
