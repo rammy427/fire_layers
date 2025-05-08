@@ -77,13 +77,35 @@ class Game:
             case "N":
                 self.cur_char = (self.cur_char + 1) % self.fighters_per_team
             case "A":
-                str = "¡Me están atacando :'(!" if other else "¡Estoy atacando >:)!"
-                print(str)
+                self.executeAttack(team_index)
         
         if delta_pos != pygame.Vector2(0, 0):
             target_pos = self.fighters[team_index][self.cur_char].grid_pos + delta_pos
             if (self.canMove(target_pos)):
                 self.fighters[team_index][self.cur_char].move(delta_pos)
+
+    def executeAttack(self, cur_team: int) -> None:
+        other_team = 1 - cur_team
+        src_pos = self.fighters[cur_team][self.cur_char].grid_pos
+        up = src_pos - pygame.Vector2(0, 1)
+        down = src_pos + pygame.Vector2(0, 1)
+        left = src_pos - pygame.Vector2(1, 0)
+        right = src_pos + pygame.Vector2(1, 0)
+
+        target_index = -1
+        # Buscar el primer soldado del otro equipo que sea adyacente.
+        for i in range(len(self.fighters[other_team])):
+            target_pos = self.fighters[other_team][i].grid_pos
+            if target_pos in (up, down, left, right):
+                target_index = i
+                break
+
+        if target_index == -1:
+            print("¡No hay soldados cerca! No puedo atacar.")
+        else:
+            print("ATAQUE!")
+            print("AGRESOR: Equipo %d, Soldado %d" % (cur_team, self.cur_char))
+            print("VÍCTIMA: Equipo %d, Soldado %d" % (other_team, target_index))
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
