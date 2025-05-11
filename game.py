@@ -103,9 +103,9 @@ class Game:
         if target_index == -1:
             print("¡No hay soldados cerca! No puedo atacar.")
         else:
-            print("ATAQUE!")
-            print("AGRESOR: Equipo %d, Soldado %d" % (cur_team, self.cur_char))
-            print("VÍCTIMA: Equipo %d, Soldado %d" % (other_team, target_index))
+            attacker = self.fighters[cur_team][self.cur_char]
+            victim = self.fighters[other_team][target_index]
+            attacker.attack(victim)
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.

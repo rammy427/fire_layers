@@ -1,4 +1,5 @@
 from board import *
+from typing import Self
 
 class Fighter:
     def __init__(self, brd: Board, grid_pos: pygame.Vector2, team: bool) -> None:
@@ -13,6 +14,11 @@ class Fighter:
     def move(self, delta: pygame.Vector2) -> None:
         self.grid_pos += delta
         self.clampToBoard()
+        
+    def attack(self, target: Self) -> None:
+        target.hp -= 10
+        print("ATTACKER:\nTeam: %d\nHP: %d" % (self.team, self.hp))
+        print("VICTIM:\nTeam: %d\nHP: %d" % (target.team, target.hp))
 
     def draw(self, screen: pygame.Surface) -> None:
         color = "red" if self.team else "blue"
