@@ -75,6 +75,8 @@ class Game:
             case "D":
                 delta_pos = pygame.Vector2(0, 1)
             case "N":
+                # TODO: Arreglar que 1 de los personajes no se está reiniciando correctamente.
+                self.fighters[team_index][self.cur_char].canAttack = True
                 self.cur_char = (self.cur_char + 1) % self.fighters_per_team
             case "A":
                 self.executeAttack(team_index)

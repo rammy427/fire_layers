@@ -7,18 +7,24 @@ class Fighter:
         self.brd = brd
         # Posición inicial del personaje.
         self.grid_pos = grid_pos
-        self.hp = 100
         # Cierto si pertenece al jugador 1, falso si pertenece al jugador 2.
         self.team = team
+        # Atributos numéricos del personaje.
+        self.hp = 100
+        self.canAttack = True
 
     def move(self, delta: pygame.Vector2) -> None:
         self.grid_pos += delta
         self.clampToBoard()
         
     def attack(self, target: Self) -> None:
-        target.hp -= 10
-        print("ATTACKER:\nTeam: %d\nHP: %d" % (self.team, self.hp))
-        print("VICTIM:\nTeam: %d\nHP: %d" % (target.team, target.hp))
+        if self.canAttack:
+            target.hp -= 10
+            self.canAttack = False
+            print("ATTACKER:\nTeam: %d\nHP: %d" % (self.team, self.hp))
+            print("VICTIM:\nTeam: %d\nHP: %d" % (target.team, target.hp))
+        else:
+            print("Se me acabó el turno.")
 
     def draw(self, screen: pygame.Surface) -> None:
         color = "red" if self.team else "blue"
