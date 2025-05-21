@@ -66,7 +66,7 @@ def main():
         if not has_current_turn:
             # Recibir mensajes del servidor.
             response = client_socket.recv(1024).decode()
-            print(f"Servidor: {response}")
+            # print(f"Servidor: {response}")
 
             client_id = 0
             # Calcular ID del cliente la primera vez que se recibe el mensaje.
