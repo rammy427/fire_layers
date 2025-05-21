@@ -25,6 +25,8 @@ class Game:
         self.fighters_per_team = fighters_per_team
         # Índice del personaje que se está moviendo.
         self.cur_char = 0
+        # Equipo ganador.
+        self.winner = -1
 
     # Función para asignar IDs permanentes de los clientes.
     # Solamente se llama al inicio de la sesión.
@@ -113,8 +115,16 @@ class Game:
     # Cada jugador muerto se elimina de la lista.
     def killFighters(self) -> None:
         if self.fighters:
-            self.fighters[0] = [fighter for fighter in self.fighters[0] if not fighter.isDead()]
-            self.fighters[1] = [fighter for fighter in self.fighters[1] if not fighter.isDead()]
+            self.fighters[self.this_id] = [fighter for fighter in self.fighters[self.this_id] if not fighter.isDead()]
+            self.fighters[self.other_id] = [fighter for fighter in self.fighters[self.other_id] if not fighter.isDead()]
+
+        # Si todos los soldados de un equipo ya murieron, decidir ganador.
+        if not self.fighters[self.this_id]:
+            self.winner = self.other_id
+            self.endGame()
+        elif not self.fighters[self.other_id]:
+            self.winner = self.this_id
+            self.endGame()
 
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
@@ -130,9 +140,12 @@ class Game:
 
     def render_frame(self) -> None:
         self.board.draw(self.screen)
-        for team in self.fighters:
-            for fighter in team:
-                fighter.draw(self.screen)
+        if self.state == States.Playing:
+            for team in self.fighters:
+                for fighter in team:
+                    fighter.draw(self.screen)
+        else:
+            print("¡Ganaste!" if self.winner == self.this_id else "Perdiste.")
 
     def resetChar(self) -> None:
         self.cur_char = 0
@@ -142,6 +155,9 @@ class Game:
     
     def endGame(self) -> None:
         self.state = States.GameOver
+
+    def isOver(self) -> bool:
+        return self.state == States.GameOver
 
     def hasQuit(self) -> bool:
         return self.state == States.Quit

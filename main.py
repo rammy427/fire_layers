@@ -32,7 +32,7 @@ def processEvent(event: pygame.event.Event):
     global has_current_turn, team_chars
     instruction = ""
 
-    if event.type == pygame.KEYDOWN:
+    if not game.isOver() and event.type == pygame.KEYDOWN:
         match event.key:
             case pygame.K_a: instruction = "L"
             case pygame.K_d: instruction = "R"
@@ -48,9 +48,9 @@ def processEvent(event: pygame.event.Event):
                 else:
                     instruction = "N"
     
-    client_socket.send(instruction.encode())
-    # Ejecutar la instrucción para ESTE equipo.
-    game.executeAction(instruction, False)
+        client_socket.send(instruction.encode())
+        # Ejecutar la instrucción para ESTE equipo.
+        game.executeAction(instruction, False)
 
 def main():
     # Ciclo principal del juego.
