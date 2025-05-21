@@ -78,9 +78,7 @@ class Game:
                 self.executeAttack(team_index)
             case "N":
                 self.fighters[team_index][self.cur_char].canAttack = True
-                self.cur_char = (self.cur_char + 1) % self.fighters_per_team
-            case "P":
-                self.fighters[team_index][self.cur_char].canAttack = True            
+                self.cur_char += 1
         
         if delta_pos != pygame.Vector2(0, 0):
             target_pos = self.fighters[team_index][self.cur_char].grid_pos + delta_pos
@@ -110,6 +108,14 @@ class Game:
             victim = self.fighters[other_team][target_index]
             attacker.attack(victim)
 
+        self.killFighters()
+
+    # Cada jugador muerto se elimina de la lista.
+    def killFighters(self) -> None:
+        if self.fighters:
+            self.fighters[0] = [fighter for fighter in self.fighters[0] if not fighter.isDead()]
+            self.fighters[1] = [fighter for fighter in self.fighters[1] if not fighter.isDead()]
+
     def run(self) -> None:
         # Llenar pantalla con color para "limpiar" el "frame" anterior.
         self.screen.fill("black")
@@ -128,6 +134,9 @@ class Game:
             for fighter in team:
                 fighter.draw(self.screen)
 
+    def resetChar(self) -> None:
+        self.cur_char = 0
+
     def resetGame(self) -> None:
         self.state = States.Playing
     
@@ -144,3 +153,6 @@ class Game:
                     print("¡Está ocupado! :(")
                     return False
         return True
+    
+    def getCurTeamFighterCount(self) -> int:
+        return len(self.fighters[self.this_id])

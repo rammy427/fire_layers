@@ -10,7 +10,7 @@ class Fighter:
         # Cierto si pertenece al jugador 1, falso si pertenece al jugador 2.
         self.team = team
         # Atributos numéricos del personaje.
-        self.hp = 100
+        self.hp = 10
         self.canAttack = True
 
     def move(self, delta: pygame.Vector2) -> None:
@@ -21,8 +21,6 @@ class Fighter:
         if self.canAttack:
             target.hp -= 10
             self.canAttack = False
-            print("ATTACKER:\nTeam: %d\nHP: %d" % (self.team, self.hp))
-            print("VICTIM:\nTeam: %d\nHP: %d" % (target.team, target.hp))
         else:
             print("Se me acabó el turno.")
 
@@ -41,3 +39,7 @@ class Fighter:
             self.grid_pos.y = 0
         elif self.grid_pos.y >= self.brd.height:
             self.grid_pos.y = self.brd.height - 1
+
+    # Función que determina si el personaje ya murió.
+    def isDead(self) -> bool:
+        return self.hp <= 0
