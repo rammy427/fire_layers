@@ -63,7 +63,7 @@ def main():
             elif has_current_turn:
                 processEvent(event)
 
-        if not has_current_turn:
+        if not has_current_turn and not game.isOver():
             # Recibir mensajes del servidor.
             response = client_socket.recv(1024).decode()
             # print(f"Servidor: {response}")

@@ -1,6 +1,7 @@
 from enum import Enum
 from animation import *
 from fighter import *
+from text import *
 import random
 
 FPS = 60
@@ -15,6 +16,7 @@ class Game:
         self.screen = screen
         self.screen_rect = screen_rect
         self.clock = pygame.time.Clock()
+        self.text_manager = TextManager(screen_rect)
         self.state = States.Playing
         # ID de este cliente y el "otro".
         self.this_id = 0
@@ -145,7 +147,7 @@ class Game:
                 for fighter in team:
                     fighter.draw(self.screen)
         else:
-            print("¡Ganaste!" if self.winner == self.this_id else "Perdiste.")
+            self.text_manager.drawGameOver(self.winner == self.this_id, self.screen)
 
     def resetChar(self) -> None:
         self.cur_char = 0
