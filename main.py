@@ -43,7 +43,7 @@ def processEvent(event: pygame.event.Event):
                 team_chars = (team_chars + 1) % game.getCurTeamFighterCount()
                 if (team_chars == 0):
                     has_current_turn = False
-                    game.resetChar()
+                    game.resetFighters()
                     instruction = "P"
                 else:
                     instruction = "N"
@@ -83,7 +83,7 @@ def main():
 
             if "Es tu turno" in response:
                 has_current_turn = True
-                game.resetChar()
+                game.resetFighters()
                 print("Me cedieron el turno!")
 
             # Ejecutar la instrucción para el OTRO equipo.

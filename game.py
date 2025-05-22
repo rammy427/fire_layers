@@ -87,6 +87,8 @@ class Game:
             case "N":
                 self.fighters[team_index][self.cur_char].canAttack = True
                 self.cur_char += 1
+            case "P":
+                self.fighters[team_index][self.cur_char].canAttack = True
         
         if delta_pos != pygame.Vector2(0, 0):
             target_pos = self.fighters[team_index][self.cur_char].grid_pos + delta_pos
@@ -158,8 +160,11 @@ class Game:
         elif self.state == States.GameOver:
             self.text_manager.drawGameOver(self.winner == self.this_id, self.screen)
 
-    def resetChar(self) -> None:
+    def resetFighters(self) -> None:
         self.cur_char = 0
+        for team in self.fighters:
+            for fighter in team:
+                fighter.canAttack = True
 
     def resetGame(self) -> None:
         self.state = States.Playing
