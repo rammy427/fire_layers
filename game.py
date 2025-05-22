@@ -143,6 +143,9 @@ class Game:
     def update_frame(self) -> None:
         # Calcular tiempo delta en milisegundos.
         dt = self.clock.tick(FPS) / 1000
+        for team in self.fighters:
+            for fighter in team:
+                fighter.update(dt)
 
     def render_frame(self) -> None:
         self.board.draw(self.screen)

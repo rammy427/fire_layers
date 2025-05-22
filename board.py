@@ -1,6 +1,7 @@
 import pygame
 
 TILE_SIZE = 32
+TILE_PADDING = 5
 
 # Tablero es un arreglo de fichas.
 class Board:
@@ -9,28 +10,27 @@ class Board:
     class Tile:
         def __init__(self, pos) -> None:
             self.rect = pygame.Rect(pos, (TILE_SIZE, TILE_SIZE))
-            self.color = pygame.Color("yellow")
-            self.padding = 5
+            self.color = pygame.Color("#80a080")
 
         def draw(self, screen: pygame.Surface) -> None:
-            pygame.draw.rect(screen, self.color, self.rect.inflate(-self.padding, -self.padding))
+            pygame.draw.rect(screen, self.color, self.rect)
 
         def drawFighter(self, screen: pygame.Surface, color: pygame.Color) -> None:
             pygame.draw.circle(screen, color, self.rect.center, TILE_SIZE // 2)
 
     def __init__(self, screen_rect: pygame.Rect) -> None:
         self.width = 20
-        self.height = 15
+        self.height = 14
 
         # Calcular posición para centralizar el tablero.
-        top_left = screen_rect.center - TILE_SIZE / 2 * pygame.Vector2(self.width, self.height)
+        top_left = screen_rect.center - (TILE_SIZE + TILE_PADDING) / 2 * pygame.Vector2(self.width, self.height)
         top_left.y -= TILE_SIZE
         
         self.tiles = []
         # Generar fichas del tablero.
         for y in range(self.height):
             for x in range(self.width):
-                self.tiles.append(self.Tile(top_left + TILE_SIZE * pygame.Vector2(x, y)))
+                self.tiles.append(self.Tile(top_left + (TILE_SIZE + TILE_PADDING) * pygame.Vector2(x, y)))
     
     def draw(self, screen: pygame.Surface) -> None:
         for tile in self.tiles:

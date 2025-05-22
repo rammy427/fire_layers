@@ -1,5 +1,6 @@
 from board import *
 from typing import Self
+from animation import *
 
 class Fighter:
     def __init__(self, brd: Board, grid_pos: pygame.Vector2, team: bool) -> None:
@@ -13,6 +14,10 @@ class Fighter:
         self.hp = 10
         self.canAttack = True
 
+        # Cargar animación.
+        filename = "sprites/fighter_%s.jpeg" % ("red" if team else "blue")
+        self.anim = Animation(32, 3, 0.125, filename)
+
     def move(self, delta: pygame.Vector2) -> None:
         self.grid_pos += delta
         self.clampToBoard()
@@ -24,9 +29,12 @@ class Fighter:
         else:
             print("Se me acabó el turno.")
 
+    def update(self, dt: float) -> None:
+        self.anim.update(dt)
+
     def draw(self, screen: pygame.Surface) -> None:
-        color = "red" if self.team else "blue"
-        self.brd.getTileAt(self.grid_pos).drawFighter(screen, color)
+        rect = self.brd.getTileAt(self.grid_pos).rect
+        self.anim.draw(rect, screen)
 
     # Atrapar personaje en el tablero.
     def clampToBoard(self) -> None:
