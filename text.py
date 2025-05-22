@@ -33,12 +33,12 @@ class TextManager:
             team1_texts.append(text)
             team1_rects.append(text.get_rect())
 
-        header2_text = self.small_font.render("Eq. 2 - ", True, "blue")
+        header2_text = self.small_font.render("Eq. 2 - ", True, "#3FD0F2")
         header2_rect = header2_text.get_rect()
         team2_texts: list[pygame.Surface] = []
         team2_rects: list[pygame.Rect] = []
         for i in range(len(fighters[1])):
-            text = self.small_font.render("HP %d: %d" % (i + 1, fighters[1][i].hp), True, "blue")
+            text = self.small_font.render("HP %d: %d" % (i + 1, fighters[1][i].hp), True, "#3FD0F2")
             team2_texts.append(text)
             team2_rects.append(text.get_rect())
 
