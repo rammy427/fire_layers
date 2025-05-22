@@ -10,6 +10,7 @@ class States(Enum):
     Playing = 0
     GameOver = 1
     Quit = 2
+    Waiting = 3
 
 class Game:
     def __init__(self, screen: pygame.Surface, screen_rect: pygame.Rect, fighters_per_team: int) -> None:
@@ -17,7 +18,7 @@ class Game:
         self.screen_rect = screen_rect
         self.clock = pygame.time.Clock()
         self.text_manager = TextManager(screen_rect)
-        self.state = States.Playing
+        self.state = States.Waiting
         # ID de este cliente y el "otro".
         self.this_id = 0
         self.other_id = 1
@@ -65,6 +66,9 @@ class Game:
         # "Concatenar" ambos equipos.
         self.fighters.append(first_team)
         self.fighters.append(second_team)
+
+        # Comenzar el juego.
+        self.state = States.Playing
 
     def executeAction(self, instruction: str, other: bool) -> None:
         team_index = self.other_id if other else self.this_id
@@ -143,10 +147,12 @@ class Game:
     def render_frame(self) -> None:
         self.board.draw(self.screen)
         if self.state == States.Playing:
+            self.text_manager.drawControls(self.screen)
+            self.text_manager.drawTeamInfo(self.fighters, self.screen)
             for team in self.fighters:
                 for fighter in team:
                     fighter.draw(self.screen)
-        else:
+        elif self.state == States.GameOver:
             self.text_manager.drawGameOver(self.winner == self.this_id, self.screen)
 
     def resetChar(self) -> None:
