@@ -45,8 +45,8 @@ class Game:
         first_team: list[Fighter] = []
         for n in range(self.fighters_per_team):
             while True:
-                rand_x = random.randint(0, self.board.width // 2 - 2)
-                rand_y = random.randint(0, self.board.height - 1)
+                rand_x = random.randint(0, BOARD_WIDTH // 2 - 2)
+                rand_y = random.randint(0, BOARD_HEIGHT - 1)
                 if (self.canMove(pygame.Vector2(rand_x, rand_y))):
                     break
 
@@ -56,8 +56,8 @@ class Game:
         second_team: list[Fighter] = []
         for n in range(self.fighters_per_team):
             while True:
-                rand_x = random.randint(self.board.width // 2 + 1, self.board.width - 1)
-                rand_y = random.randint(0, self.board.height - 1)
+                rand_x = random.randint(BOARD_WIDTH // 2 + 1, BOARD_HEIGHT - 1)
+                rand_y = random.randint(0, BOARD_HEIGHT - 1)
                 if (self.canMove(pygame.Vector2(rand_x, rand_y))):
                     break
 

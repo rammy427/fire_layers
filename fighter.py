@@ -46,13 +46,13 @@ class Fighter:
     def clampToBoard(self) -> None:
         if self.grid_pos.x < 0:
             self.grid_pos.x = 0
-        elif self.grid_pos.x >= self.brd.width:
-            self.grid_pos.x = self.brd.width - 1
+        elif self.grid_pos.x >= BOARD_WIDTH:
+            self.grid_pos.x = BOARD_WIDTH - 1
 
         if self.grid_pos.y < 0:
             self.grid_pos.y = 0
-        elif self.grid_pos.y >= self.brd.height:
-            self.grid_pos.y = self.brd.height - 1
+        elif self.grid_pos.y >= BOARD_HEIGHT:
+            self.grid_pos.y = BOARD_HEIGHT - 1
 
     # Función que determina si el personaje ya murió.
     def isDead(self) -> bool:
