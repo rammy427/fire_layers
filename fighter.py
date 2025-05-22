@@ -1,17 +1,23 @@
 from board import *
 from typing import Self
 from animation import *
+import random
 
 class Fighter:
-    def __init__(self, brd: Board, grid_pos: pygame.Vector2, team: bool) -> None:
+    def __init__(self, brd: Board, grid_pos: pygame.Vector2, team: bool, seed: int) -> None:
         # Mantener referencia al tablero.
         self.brd = brd
         # Posición inicial del personaje.
         self.grid_pos = grid_pos
         # Cierto si pertenece al jugador 1, falso si pertenece al jugador 2.
         self.team = team
+
+        random.seed(seed)
         # Atributos numéricos del personaje.
-        self.hp = 10
+        # TODO: Implementar suma máxima de atributos (para balanceo).
+        self.hp = random.randint(15, 25)
+        self.atk = random.randint(10, 15)
+        self.defense = random.randint(3, 7)
         self.canAttack = True
 
         # Cargar animación.
@@ -24,7 +30,7 @@ class Fighter:
         
     def attack(self, target: Self) -> None:
         if self.canAttack:
-            target.hp -= 10
+            target.hp -= self.atk - target.defense
             self.canAttack = False
         else:
             print("Se me acabó el turno.")

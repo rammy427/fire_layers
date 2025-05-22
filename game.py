@@ -50,7 +50,7 @@ class Game:
                 if (self.canMove(pygame.Vector2(rand_x, rand_y))):
                     break
 
-            first_team.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True))
+            first_team.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), True, seed + n))
         
         # Generar personajes del segundo equipo.
         second_team: list[Fighter] = []
@@ -61,7 +61,7 @@ class Game:
                 if (self.canMove(pygame.Vector2(rand_x, rand_y))):
                     break
 
-            second_team.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False))
+            second_team.append(Fighter(self.board, pygame.Vector2(rand_x, rand_y), False, seed + n + 3))
         
         # "Concatenar" ambos equipos.
         self.fighters.append(first_team)
