@@ -4,7 +4,7 @@ import socket
 # Inicializar ventana.
 pygame.init()
 
-DEBUG = True
+DEBUG = False
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FIGHTERS_PER_TEAM = 3
